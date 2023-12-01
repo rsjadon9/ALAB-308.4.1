@@ -1,6 +1,8 @@
+//Part 1: Refactoring Old Code
+//Solving using Object and Array
 const personRawData = `ID,Name,Occupation,Age\n42,Bruce,Knight,41\n57,Bob,Fry Cook,19\n63,Blaine,Quiz Master,58\n98,Bill,Doctor's Assistant,26`
 
-console.log("\n****Using known columns, objects and arrays\n\n");
+console.log("\n****PART1 Using known columns, objects and arrays\n\n");
 
 let column1 = "";
 let column2 = "";
@@ -35,7 +37,8 @@ for (let i = 0; i < personRawData.length; i++) {
         personObj.age = column4;
 
         //add to my array
-        personOutputArray.push(personObj);
+        if (rowCounter > 1)
+            personOutputArray.push(personObj);
 
 
         column1 = '';
@@ -62,16 +65,19 @@ for (let i = 0; i < personRawData.length; i++) {
 
 }
 
-console.log(personOutputArray);
 
+console.log("PART1 OUTPUT BELOW");
 for (let i = 0; i < personOutputArray.length; i++) {
     const currentPersonValue = personOutputArray[i];
     console.log(currentPersonValue.id + "," + currentPersonValue.name + "," + currentPersonValue.occupation + "," + currentPersonValue.age)
 }
 
-//////Part Two
+//END OF PART1
 
-onsole.log("\n****Now with multi-dimentional array\n\n");
+//Part 2: Expanding Functionality
+//Solving using 2D Array
+
+console.log("\n****PART2 2D array\n\n");
 
 const rowWithColumns = [];
 
@@ -82,31 +88,73 @@ let columnCount = 0;
 //loop one character at a time
 for (let i = 0; i < personRawData.length; i++) {
 
+    const val = personRawData[i];
     //column delimiter
-    if (personRawData[i] === ',') {
+    if (val === ',') {
         columnCount++;
         continue;
     }
 
     //rowCounter delimiter
-    if (personRawData[i] === '\n' || i === personRawData.length - 1) {
+    if (val === '\n' || i === personRawData.length - 1) {
         rowWithColumns.push(singleRow);
         singleRow = [];
         columnCount = 0;
         continue;
     }
-    singleRow[columnCount] = singleRow[columnCount] != undefined ? singleRow[columnCount] + personRawData[i] : personRawData[i];
+    singleRow[columnCount] = singleRow[columnCount] != undefined ? singleRow[columnCount] + val : val;
 }
 
-for (let i = 0; i < rowWithColumns.length; i++) {
-    const singleRow = rowWithColumns[i];
-    let rowValue = "";
-    for (let j = 0; j < singleRow.length; j++) {
-        rowValue += rowValue.length > 0 ? "," + singleRow[j] : singleRow[j];
+console.log(rowWithColumns);
+
+//END OF PART2
+
+//Part 3: Transforming Data
+//Solve using object with lower case field names
+//I am reusing my code from PART1
+
+console.log("PART3 Output");
+console.log(personOutputArray);
+
+//END OF PART3
+
+/////Part 4: Sorting and Manipulating Data
+////1 Remove the last element from the sorted array.
+
+const part4OutputArray = [];
+personOutputArray.forEach(r => part4OutputArray.push(r));
+
+part4OutputArray.slice(-1);
+
+/// 2 .Insert the following object at index 1:
+///{ id: "48", name: "Barry", occupation: "Runner", age: "25" }
+const berry = {
+    id: "48", name: "Barry", occupation: "Runner", age: "25"
+};
+part4OutputArray.splice(1, 0, berry);
+
+////3..Add the following object to the end of the array:
+///{ id: "7", name: "Bilbo", occupation: "None", age: "111" }
+const bilbo = { id: "7", name: "Bilbo", occupation: "None", age: "111" };
+part4OutputArray[part4OutputArray.length - 1] = bilbo;
+console.log("PART4 Output");
+console.log(part4OutputArray);
+
+let totalAge = 0;
+part4OutputArray.forEach(r => {
+    totalAge += parseInt(r.age);
+});
+const avgAge = totalAge / part4OutputArray.length;
+console.log(`Average Age is ${avgAge}`);
+
+//Part 5: Full Circle
+let finalCsv = "ID,Name,Occupation,Age\\n";
+for (let i = 0; i < part4OutputArray.length; i++) {
+    const currentPersonValue = part4OutputArray[i];
+    finalCsv += currentPersonValue.id + "," + currentPersonValue.name + "," + currentPersonValue.occupation + "," + currentPersonValue.age;
+    if (i < part4OutputArray.length - 1) {
+        finalCsv += "\\n";
     }
-    console.log(rowValue);
-
 }
-
-
-
+console.log("Final csv below");
+console.log(finalCsv);
